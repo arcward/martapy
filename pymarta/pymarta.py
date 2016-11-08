@@ -2,7 +2,7 @@ import requests
 import configparser
 import os
 from configparser import ConfigParser
-
+import datetime
 
 class Rail:
     def __init__(self):
@@ -10,6 +10,8 @@ class Rail:
         config._interpolation = configparser.ExtendedInterpolation()
         config.read(os.path.join(os.path.dirname(__file__), 'config.ini'))
         self.url_arrivals = config.get('Rail', 'url_arrivals')
+        self.dashing_url = config.get('Dashing', 'url')
+        self.dashing_token = config.get('Dashing', 'auth_token')
     
     def arrivals(self, station=None):
         """Retrieve list of real-time train arrivals from MARTA API
@@ -33,3 +35,19 @@ class Rail:
             return [arrival for arrival in all_arrivals if station in arrival['STATION']]
         else:
             return all_arrivals
+        
+    def dashing_push(self):
+        arr = self.arrivals('BUCKHEAD')
+        dashing_friendly = [
+            {
+                'label': event['DESTINATION'],
+                'value': event['WAITING_TIME']
+            } for event in arr
+        ]
+        
+        d_data = {
+            'auth_token': self.dashing_token,
+            'title': 'Buckhead station',
+            'items': dashing_friendly
+        }
+        requests.post(url=self.dashing_url, json=d_data)

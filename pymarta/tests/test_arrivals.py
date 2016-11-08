@@ -32,3 +32,7 @@ class TestArrivals(TestCase):
         station_list = self.r.arrivals(example_station)
         for s in station_list:
             self.assertTrue(example_station in s['STATION'])
+
+    def test_dashing_push(self):
+        s_list = self.r.arrivals(station='BUCKHEAD')
+        self.r.dashing_push()

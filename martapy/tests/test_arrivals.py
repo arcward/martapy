@@ -1,13 +1,16 @@
 from unittest import TestCase
 from martapy.martapy import Rail
+from configparser import ConfigParser
 
 
 class TestArrivals(TestCase):
     def setUp(self):
-        self.r = Rail()
+        test_config = ConfigParser()
+        test_config.read('config.ini')
+        api_key = test_config.get('rail', 'api_key')
+        self.r = Rail(api_key=api_key)
     
     def test_all(self):
-        self.r = Rail()
         arrival_list = self.r.arrivals()
         print(arrival_list)
         

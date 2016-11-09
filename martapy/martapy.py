@@ -1,19 +1,14 @@
 import requests
-import configparser
 import os
-from configparser import ConfigParser
-import datetime
 
 
 class Rail:
-    def __init__(self, api_key=None):
-        config = ConfigParser()
-        config._interpolation = configparser.ExtendedInterpolation()
-        config.read(os.path.join(os.path.dirname(__file__), 'config.ini'))
-        self.url_arrivals = config.get('Rail', 'url_arrivals')
-        self.dashing_url = config.get('Dashing', 'url')
-        self.dashing_token = config.get('Dashing', 'auth_token')
-    
+    """Client for the MARTA rail API to retrieve pending arrivals."""
+    def __init__(self, api_key):
+        base_url = "http://developer.itsmarta.com/"
+        arrivals_url = "RealtimeTrain/RestServiceNextTrain/GetRealtimeArrivals?apikey={}"
+        self.url = ''.join([base_url, arrivals_url.format(api_key)])
+
     def arrivals(self, station=None):
         """Retrieve list of real-time train arrivals from MARTA API
         Each arrival in returned list is a dict like:
@@ -29,7 +24,7 @@ class Rail:
             'WAITING_TIME': 'Boarding'               # Arriving, Arrived, Boarding,... 1 min, 2 min, 3 min...
         }
         """
-        raw_arrivals = requests.get(self.url_arrivals)
+        raw_arrivals = requests.get(self.url)
         all_arrivals = raw_arrivals.json()
         
         if station is not None:

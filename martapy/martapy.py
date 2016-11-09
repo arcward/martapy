@@ -10,7 +10,9 @@ class Rail:
         self.url = ''.join([base_url, arrivals_url.format(api_key)])
 
     def arrivals(self, station=None):
-        """Retrieve list of real-time train arrivals from MARTA API
+        """Retrieve list of real-time train arrivals from MARTA API.
+        If station isn't specified, all entries will be returned.
+        Otherwise, specify part of the station name (ex: "Buckhead") and matching entries will be returned.
         Each arrival in returned list is a dict like:
         {
             'DESTINATION':  'North Springs'          # The destination area, not the station name
@@ -26,8 +28,7 @@ class Rail:
         """
         raw_arrivals = requests.get(self.url)
         all_arrivals = raw_arrivals.json()
-        
-        if station is not None:
-            return [arrival for arrival in all_arrivals if station in arrival['STATION']]
+        if station is not None:  # Compare in uppercase
+            return [arrival for arrival in all_arrivals if station.upper() in arrival['STATION']]
         else:
             return all_arrivals

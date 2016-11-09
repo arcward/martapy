@@ -1,5 +1,5 @@
 from unittest import TestCase
-from pymarta.pymarta import Rail
+from martapy.martapy import Rail
 
 
 class TestArrivals(TestCase):

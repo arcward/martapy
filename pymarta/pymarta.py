@@ -4,8 +4,9 @@ import os
 from configparser import ConfigParser
 import datetime
 
+
 class Rail:
-    def __init__(self):
+    def __init__(self, api_key=None):
         config = ConfigParser()
         config._interpolation = configparser.ExtendedInterpolation()
         config.read(os.path.join(os.path.dirname(__file__), 'config.ini'))
@@ -35,19 +36,3 @@ class Rail:
             return [arrival for arrival in all_arrivals if station in arrival['STATION']]
         else:
             return all_arrivals
-        
-    def dashing_push(self):
-        arr = self.arrivals('BUCKHEAD')
-        dashing_friendly = [
-            {
-                'label': event['DESTINATION'],
-                'value': event['WAITING_TIME']
-            } for event in arr
-        ]
-        
-        d_data = {
-            'auth_token': self.dashing_token,
-            'title': 'Buckhead station',
-            'items': dashing_friendly
-        }
-        requests.post(url=self.dashing_url, json=d_data)

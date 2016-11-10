@@ -1,2 +1,5 @@
 config.ini
 .idea
+build/
+dist/
+martapy.egg-info

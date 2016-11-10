@@ -57,6 +57,6 @@ class TestArrivals(TestCase):
     def test_station(self):
         example_station = 'Peachtree'
         station_list = self.r.arrivals(example_station)
-        self.assertTrue(len(station_list) > 0, "Test a station that has some results...")
+        self.assertTrue(len(station_list) > 0, "Try testing a station that has some results..")
         for s in station_list:
             self.assertTrue(example_station.upper() in s['STATION'])  # API uses uppercase stations

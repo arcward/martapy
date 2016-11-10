@@ -49,9 +49,8 @@ class Rail:
             'WAITING_TIME': 'Boarding'               # Arriving, Arrived, Boarding,... 1 min, 2 min, 3 min...
         }
         """
-        raw_arrivals = requests.get(self.url)
-        all_arrivals = raw_arrivals.json()
-        if station is not None:  # Compare in uppercase
+        all_arrivals = requests.get(self.url).json()
+        if station is not None:
             return [arrival for arrival in all_arrivals if station.upper() in arrival['STATION']]
         else:
             return all_arrivals

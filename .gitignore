@@ -3,3 +3,17 @@ config.ini
 build/
 dist/
 martapy.egg-info
+_build
+_static
+_templates
+doc_out
+Makefile
+_build/
+_static/
+_templates/
+conf.py
+doc_out/
+index.rst
+make.bat
+martapy/__pycache__/
+martapy/tests/__pycache__/

@@ -1,3 +1,3 @@
-__all__ = ['martapy']
-
 import martapy
+
+__all__ = ['martapy']

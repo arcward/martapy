@@ -8,5 +8,5 @@ setup(
     description = "A client for MARTA's API.",
     license = "MIT",
     keywords = "MARTA, rail, bus, API, Atlanta",
-    packages=['martapy']
+    packages=['martapy'], install_requires=['requests']
 )

@@ -23,4 +23,3 @@ SOFTWARE.
 """
 
 __all__ = ['martapy']
-import martapy

@@ -1,4 +1,4 @@
-config.ini
+tests/config.ini
 .idea
 build/
 dist/
@@ -16,4 +16,4 @@ doc_out/
 index.rst
 make.bat
 martapy/__pycache__/
-martapy/tests/__pycache__/
+tests/tests/__pycache__/

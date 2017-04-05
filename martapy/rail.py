@@ -25,7 +25,7 @@ import json
 import requests
 from datetime import datetime
 from warnings import warn
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 
 URL = ("http://developer.itsmarta.com/RealtimeTrain/RestServiceNextTrain"
        "/GetRealtimeArrivals?apikey={api_key}")
@@ -189,25 +189,20 @@ class Arrivals(list):
 
     @property
     def trains(self):
-        trains = {}
+        trains = defaultdict(list)
         for a in self._arrivals:
-            if a.train_id not in trains:
-                trains[a.train_id] = [a]
-            else:
-                trains[a.train_id].append(a)
-
+            trains[a.train_id].append(a)
+        # Sort by arrival time
         for train_events in trains.values():
             train_events.sort(key=lambda x: x.next_arr)
         return OrderedDict(sorted(trains.items()))
 
     @property
     def stations(self):
-        station_arrivals = {}
+        station_arrivals = defaultdict(list)
         for a in self._arrivals:
-            if a.station not in station_arrivals:
-                station_arrivals[a.station] = [a]
-            else:
-                station_arrivals[a.station].append(a)
+            station_arrivals[a.station].append(a)
+
         return OrderedDict(sorted(station_arrivals.items()))
 
     def by_station(self, station_name):

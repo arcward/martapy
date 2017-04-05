@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
+import os
 from unittest import TestCase
 from martapy import rail
 from martapy.rail import RailClient
@@ -31,14 +31,16 @@ from configparser import ConfigParser
 class TestArrivals(TestCase):
     def setUp(self):
         test_config = ConfigParser()
-        test_config.read('config.ini')
+        conf_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 'config.ini')
+        test_config.read(conf_file)
         api_key = test_config.get('rail', 'api_key')
         self.api_client = RailClient(api_key=api_key)
         self.r = self.api_client.arrivals()
 
     def test_stations(self):
-        for a in self.arrivals:
-            self.assertIn(a.station, rail.stations)
+        for a in self.r:
+            self.assertIn(a.station, rail.station_list)
 
     def test_all(self):
         # Ensure all results have the keys we're expecting
@@ -60,7 +62,7 @@ class TestArrivals(TestCase):
                                      "All responses should have these fields")
 
         for arrival in arrival_list:
-            self.assertIn(arrival.station, rail.stations)
+            self.assertIn(arrival.station, rail.station_list)
 
     def test_chain(self):
         red_north = self.r.red_line.northbound
@@ -137,8 +139,8 @@ class TestArrivals(TestCase):
                                 "Try testing a station that has some results")
 
         # Ensure all stations in the station list returns results
-        for s in rail.stations:
-            arrivals = self.r.arrivals(station=s)
+        for s in rail.station_list:
+            arrivals = self.r.by_station(s)
             self.assertGreaterEqual(len(arrivals), 1, "{}".format(s))
             for a in arrivals:
                 self.assertEqual(s, a.station)

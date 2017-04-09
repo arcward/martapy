@@ -109,7 +109,7 @@ class Arrivals(list):
             a.json = arrival
             arrival_list.append(a)
         self._arrivals = arrival_list
-        self._arrivals.sort(key=lambda a: a.next_arr)
+        self._arrivals.sort(key=lambda ar: ar.next_arr)
         self.__new_station()
 
     # Line filters
@@ -244,7 +244,7 @@ class Arrival:
             station name, ex: 'AIRPORT STATION' becomes 'Airport')
         :param direction: Cardinal direction (N, S, E, W)
         :param next_arr: Time of the next arrival, as HH:MM:SS AM/PM
-        :param waiting_time: Arriving, Arrived, Boarding, 1 min, 2 min, 3 min...
+        :param waiting_time: Arriving, Arrived, Boarding, 1 min, 2 min, ...
         :param waiting_seconds: Example: '-45'
         :param event_time: Timestamp as MM/DD/YYYY H:MM:SS AM/PM
         :param train_id: Train ID
@@ -293,7 +293,8 @@ class Arrival:
     @event_time.setter
     def event_time(self, event_time):
         """Set the event time as MM/DD/YYYY HH:MM:SS AM/PM"""
-        self._event_time = datetime.strptime(event_time, "%m/%d/%Y %I:%M:%S %p")
+        self._event_time = datetime.strptime(event_time,
+                                             "%m/%d/%Y %I:%M:%S %p")
 
     @property
     def next_arr(self):

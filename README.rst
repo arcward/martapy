@@ -1,14 +1,15 @@
 =======
 MARTApy
 =======
-
 A Python-based library for accessing the MARTA API.
 
 More: http://www.itsmarta.com/app-developer-resources.aspx
 
+
+Quickstart
 ============
 Installation
-============
+------------
 To install via *pip*, just:
 
 .. code-block:: bash
@@ -21,9 +22,9 @@ Or, locally from the same directory as ``setup.py``:
 
     $ python setup.py install
 
-===========
+
 Example use
-===========
+-----------
 
 To get a list of train arrivals:
 
@@ -55,9 +56,8 @@ With output that would look something like::
     To: Lindbergh, When: 16 min
     To: Doraville, When: 19 min
 
-=======
 Filters
-=======
+-------
 
 To narrow results, ``martapy.rail.Arrivals(list)`` has
 a number of properties/methods:
@@ -93,9 +93,9 @@ get all arrivals for the red line which are heading southbound:
     rail_client = RailClient(api_key="your_api_key")
     arrivals = rail_client.arrivals().red_line.southbound
 
-================
+
 Other properties
-================
+----------------
 Each ``Arrivals`` instance returned is just a list of
 ``martapy.rail.Arrival`` objects, with properties similar to the filters
 above (*station, direction, event\_time, line...*). To get the original

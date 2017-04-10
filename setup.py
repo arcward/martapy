@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name="martapy",
-    version="1.0.0",
+    version="1.0.1",
     author="Edward Wells",
     author_email="git@edward.sh",
     description="Python client library for the MARTA API",

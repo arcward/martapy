@@ -62,29 +62,26 @@ Filters
 To narrow results, ``martapy.rail.Arrivals(list)`` has
 a number of properties/methods:
 
--  Arrivals by **line**:
--  ``red_line``
--  ``blue_line``
--  ``green_line``
--  ``gold_line``
--  Arrivals by **direction**:
--  ``northbound``
--  ``eastbound``
--  ``westbound``
--  ``southbound``
--  Arrivals by **waiting time**:
--  ``boarding``
--  ``arriving``
--  ``arrived``
--  ``Arrivals.by_station('station name')`` returns all arrivals for a
-   specific station
--  ``Arrivals.trains`` Returns each train and its associated arrivals:
-   (as an *OrderedDict* with train IDs as keys, and that train's list of
-   arrivals as its value)
--  ``Arrivals.stations`` returns each station and its associated
-   arrivals (as an
-   *OrderedDict* with station names as keys, list of arrivals as its
-   value)
+- Arrivals by **line**:
+  ``red_line``
+  ``blue_line``
+  ``green_line``
+  ``gold_line``
+- Arrivals by **direction**:
+  ``northbound``
+  ``eastbound``
+  ``westbound``
+  ``southbound``
+- Arrivals by **waiting time**:
+  ``boarding``
+  ``arriving``
+  ``arrived``
+- Arrivals grouped by **station name**:
+  ``Arrivals.stations``
+- Arrivals grouped by **train ID**:
+  ``Arrivals.trains``
+- Arrivals associated with a **specific station**:
+  ``Arrivals.by_station('station name')``
 
 These can be chained as well for more specific results. For example, to
 get all arrivals for the red line which are heading southbound:

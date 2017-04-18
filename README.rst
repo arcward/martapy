@@ -2,9 +2,8 @@
 MARTApy
 =======
 
-A Python-based library for accessing the MARTA API.
-
-More: http://www.itsmarta.com/app-developer-resources.aspx
+Python wrapper for MARTA realtime rail and bus APIs:
+http://www.itsmarta.com/app-developer-resources.aspx
 
 ============
 Installation
@@ -21,12 +20,12 @@ Or, locally from the same directory as ``setup.py``:
 
     $ python setup.py install
 
-===========
-Example use
-===========
+==========
+Quickstart
+==========
 
 Rail
-^^^^
+----
 To get a list of train arrivals:
 
 .. code-block:: python
@@ -57,34 +56,8 @@ With output that would look something like::
     To: Lindbergh, When: 16 min
     To: Doraville, When: 19 min
 
-Bus
-^^^^
-To get a list of active buses:
-
-.. code-block:: python
-
-    from martapy import BusClient
-
-    bus_client = BusClient()
-    buses = bus_client.buses()
-
-To get active buses for a particular route number, use
-``BusClient.buses(route=111)`` (or any other route number)
-
-To filter this list down further, use ``filter()`` on the returned ``Buses``
-list. For example, to return only *Westbound* buses:
-
-.. code-block:: python
-
-    from martapy import BusClient
-
-    bus_client = BusClient()
-    buses = bus_client.buses().filter(direction='Westbound')
-
-=======
 Filters
-=======
-
+-------
 To narrow results, ``martapy.rail.Arrivals(list)`` has
 a number of properties/methods:
 
@@ -119,10 +92,34 @@ get all arrivals for the red line which are heading southbound:
     rail_client = RailClient(api_key="your_api_key")
     arrivals = rail_client.arrivals().red_line.southbound
 
-================
 Other properties
-================
+----------------
 Each ``Arrivals`` instance returned is just a list of
 ``martapy.rail.Arrival`` objects, with properties similar to the filters
 above (*station, direction, event\_time, line...*). To get the original
 JSON string back, use ``Arrival.json``.
+
+====
+Bus
+====
+To get a list of active buses:
+
+.. code-block:: python
+
+    from martapy import BusClient
+
+    bus_client = BusClient()
+    buses = bus_client.buses()
+
+To get active buses for a particular route number, use
+``BusClient.buses(route=111)`` (or any other route number)
+
+To filter this list down further, use ``filter()`` on the returned ``Buses``
+list. For example, to return only *Westbound* buses:
+
+.. code-block:: python
+
+    from martapy import BusClient
+
+    bus_client = BusClient()
+    buses = bus_client.buses().filter(direction='Westbound')

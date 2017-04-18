@@ -1,7 +1,6 @@
 import os
 from unittest import TestCase
-from martapy import rail
-from martapy.rail import RailClient
+from martapy import RailClient, rail
 from configparser import ConfigParser
 
 

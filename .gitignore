@@ -17,3 +17,4 @@ index.rst
 make.bat
 martapy/__pycache__/
 tests/tests/__pycache__/
+*.pyc

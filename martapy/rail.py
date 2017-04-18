@@ -1,11 +1,17 @@
+"""
+API client library for the MARTA Rail Realtime RESTful API
+
+More info: http://www.itsmarta.com/app-developer-resources.aspx
+
+"""
+
 import json
 import requests
 from datetime import datetime
 from warnings import warn
 from collections import OrderedDict, defaultdict
 
-URL = ("http://developer.itsmarta.com/RealtimeTrain/RestServiceNextTrain"
-       "/GetRealtimeArrivals?apikey={api_key}")
+
 station_list = [
     'AIRPORT STATION',
     'ARTS CENTER STATION',
@@ -51,58 +57,70 @@ station_list = [
 class RailClient:
     """Client for the MARTA rail API to retrieve pending arrivals.
     
-    API returns an arrival in a dict like:
-            {
-                'DESTINATION':  'North Springs',
-                'DIRECTION':    'N',
-                'EVENT_TIME':   '12/31/2017 4:09:10 PM',
-                'LINE':         'BLUE',
-                'NEXT_ARR':     '04:12:10 PM',
-                'STATION':      'NORTH SPRINGS STATION',
-                'TRAIN_ID':     '104026',
-                'WAITING_SECONDS': '-45',
-                'WAITING_TIME': 'Boarding'
-            }
+    The API returns an 'arrival' in a dict like:
+    
+    .. code-block:: json
+    
+        {
+            "DESTINATION":  "North Springs",
+            "DIRECTION":    "N",
+            "EVENT_TIME":   "12/31/2017 4:09:10 PM",
+            "LINE":         "BLUE",
+            "NEXT_ARR":     "04:12:10 PM",
+            "STATION":      "NORTH SPRINGS STATION",
+            "TRAIN_ID":     "104026",
+            "WAITING_SECONDS": "-45",
+            "WAITING_TIME": "Boarding"
+        }
+            
     """
+    base_url = "http://developer.itsmarta.com/RealtimeTrain" \
+               "/RestServiceNextTrain/GetRealtimeArrivals?apikey={api_key}"
+
     def __init__(self, api_key):
         """Initialize client
 
-        :param api_key: Your MARTA API key
+        :param api_key: MARTA API key
         :type api_key: str
         """
-        self.url = URL.format(api_key=api_key)
+        self.api_key = api_key
         self._trains = None
 
     def arrivals(self):
-        """Retrieves current train arrivals.
+        """Retrieves and returns current arrivals as ``Arrivals(list)``
             
         :return: A list of current train arrivals (events)
-        :rtype: ``martapy.rail.Arrivals``
+        :rtype: ``martapy.rail.Arrivals(list)``
         """
         arrivals = requests.get(self.url).json()
         # Copy each dict to a new one with lowercase keys to pass to Arrival()
         return Arrivals(arrivals)
 
+    @property
+    def url(self):
+        """``RailClient.base_url`` formatted with API key"""
+        return self.base_url.format(self.api_key)
+
 
 class Arrivals(list):
+    """A list of ``Arrival`` objects returned from the API"""
     def __init__(self, arrivals):
         """
-
-        :param arrivals: List of arrivals retrieved from
-        :type arrivals:
+        :param arrivals: List of ``Arrival`` objects
+        :type arrivals: ``martapy.rail.Arrival``
         """
         self._arrivals = None
         self.arrivals = arrivals
         super().__init__(self._arrivals)
 
-    # All arrivals
-
     @property
     def arrivals(self):
+        """All ``Arrival`` objects"""
         return self._arrivals
 
     @arrivals.setter
     def arrivals(self, arrivals):
+        # Transforms JSON objects to a list of ``Arrival`` objects
         arrival_list = []
         for arrival in arrivals:
             a = Arrival(**dict((k.lower(), v) for (k, v) in arrival.items()))
@@ -116,56 +134,70 @@ class Arrivals(list):
 
     @property
     def blue_line(self):
+        """Arrivals for the blue line"""
         return self._filter('line', 'BLUE')
 
     @property
     def gold_line(self):
+        """Arrivals for the gold line"""
         return self._filter('line', 'GOLD')
 
     @property
     def green_line(self):
+        """Arrivals for the green line"""
         return self._filter('line', 'GREEN')
 
     @property
     def red_line(self):
+        """Arrivals for the red line"""
         return self._filter('line', 'RED')
 
     # Directional filters
 
     @property
     def northbound(self):
+        """Northbound arrivals"""
         return self._filter('direction', 'N')
 
     @property
     def eastbound(self):
+        """Eastbound arrivals"""
         return self._filter('direction', 'E')
 
     @property
     def westbound(self):
+        """Westbound arrivals"""
         return self._filter('direction', 'W')
 
     @property
     def southbound(self):
+        """Southbound arrivals"""
         return self._filter('direction', 'S')
-
-    # Waiting time filters
 
     @property
     def boarding(self):
+        """Arrivals that are currently boarding"""
         return self._filter('waiting_time', 'Boarding')
 
     @property
     def arriving(self):
+        """Arrivals that are... arriving"""
         return self._filter('waiting_time', 'Arriving')
 
     @property
     def arrived(self):
+        """Arrivals that have arrived"""
         return self._filter('waiting_time', 'Arrived')
 
     # Misc filters
 
     @property
     def trains(self):
+        """Arrivals grouped by train ID
+        
+        :return: *OrderedDict*, train IDs as keys and each train's 
+            associated arrivals as lists
+        """
         trains = defaultdict(list)
         for a in self._arrivals:
             trains[a.train_id].append(a)
@@ -176,6 +208,11 @@ class Arrivals(list):
 
     @property
     def stations(self):
+        """Arrivals grouped by station name
+        
+        :return: *OrderedDict* with station names as keys and associated 
+            arrivals as values
+        """
         station_arrivals = defaultdict(list)
         for a in self._arrivals:
             station_arrivals[a.station].append(a)
@@ -236,7 +273,7 @@ class Arrivals(list):
 class Arrival:
     def __init__(self, station, line, destination, direction, next_arr,
                  waiting_time, waiting_seconds, event_time, train_id):
-        """Arrival event.
+        """Arrival event
 
         :param station: Station name (uppercase)
         :param line: Line (BLUE, GREEN, RED, GOLD)
@@ -254,19 +291,29 @@ class Arrival:
         self._json = None
         self._next_arr = None
 
-        self.destination = destination
         self.direction = direction
         self.event_time = event_time
-        self.line = line
-        self.next_arr = next_arr
-        self.station = station.upper()
         self.train_id = train_id
+        self.next_arr = next_arr
+
+        #: Destination (station name sans '*STATION*')
+        self.destination = destination
+
+        #: *RED*, *GREEN*, *BLUE*, or *GOLD* line
+        self.line = line
+
+        #: Station name (current list: ``martapy.rail.station_list``)
+        self.station = station.upper()
+
+        #: Positive or negative integer (ex '*-45*' seconds)
         self.waiting_seconds = waiting_seconds
+
+        #: *Arriving*, *Arrived*, *Boarding*, *1 min*, *2 min*...
         self.waiting_time = waiting_time
 
     @property
     def direction(self):
-        """"Direction of travel as N, E, W or S"""
+        """Direction of travel as one of: *N, E, W, S*"""
         return self._direction
 
     @direction.setter
@@ -292,13 +339,13 @@ class Arrival:
 
     @event_time.setter
     def event_time(self, event_time):
-        """Set the event time as MM/DD/YYYY HH:MM:SS AM/PM"""
+        """Set the event time as *MM/DD/YYYY HH:MM:SS AM/PM*"""
         self._event_time = datetime.strptime(event_time,
                                              "%m/%d/%Y %I:%M:%S %p")
 
     @property
     def next_arr(self):
-        """Time of the train's next arrival as HH:MM:SS AM/PM"""
+        """Time of the train's next arrival as *HH:MM:SS AM/PM*"""
         return self._next_arr
 
     @property

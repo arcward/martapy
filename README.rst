@@ -1,13 +1,21 @@
 =======
 MARTApy
 =======
+<<<<<<< HEAD
 
 Python wrapper for MARTA realtime rail and bus APIs:
 http://www.itsmarta.com/app-developer-resources.aspx
+=======
+A Python-based library for accessing the MARTA API.
 
+More: http://www.itsmarta.com/app-developer-resources.aspx
+>>>>>>> 90724ea658651aa7b74b2a5097b9984f194078a9
+
+
+Quickstart
 ============
 Installation
-============
+------------
 To install via *pip*, just:
 
 .. code-block:: bash
@@ -20,9 +28,16 @@ Or, locally from the same directory as ``setup.py``:
 
     $ python setup.py install
 
+<<<<<<< HEAD
 ====
 Rail
 ====
+=======
+
+Example use
+-----------
+
+>>>>>>> 90724ea658651aa7b74b2a5097b9984f194078a9
 To get a list of train arrivals:
 
 .. code-block:: python
@@ -55,6 +70,10 @@ With output that would look something like::
 
 Filters
 -------
+<<<<<<< HEAD
+=======
+
+>>>>>>> 90724ea658651aa7b74b2a5097b9984f194078a9
 To narrow results, ``martapy.rail.Arrivals(list)`` has
 a number of properties/methods:
 
@@ -89,6 +108,10 @@ get all arrivals for the red line which are heading southbound:
     rail_client = RailClient(api_key="your_api_key")
     arrivals = rail_client.arrivals().red_line.southbound
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 90724ea658651aa7b74b2a5097b9984f194078a9
 Other properties
 ----------------
 Each ``Arrivals`` instance returned is just a list of

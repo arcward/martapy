@@ -7,10 +7,10 @@ def read(fname):
 
 setup(
     name="martapy",
-    version="1.0.1",
+    version="1.1",
     author="Edward Wells",
     author_email="git@edward.sh",
-    description="Python client library for the MARTA API",
+    description="Wrapper for MARTA realtime rail/bus APIs",
     long_description=read('README.rst'),
     keywords="MARTA API rail train Atlanta Georgia GA ATL itsmarta",
     url="https://github.com/arcward/fbparser",

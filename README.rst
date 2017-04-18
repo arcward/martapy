@@ -20,12 +20,9 @@ Or, locally from the same directory as ``setup.py``:
 
     $ python setup.py install
 
-==========
-Quickstart
-==========
-
+====
 Rail
-----
+====
 To get a list of train arrivals:
 
 .. code-block:: python

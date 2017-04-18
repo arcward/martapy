@@ -10,7 +10,7 @@ class TestArrivals(TestCase):
         conf_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                  'config.ini')
         test_config.read(conf_file)
-        api_key = test_config.get('rail', 'api_key')
+        api_key = test_config.get('rail', 'apikey')
         self.api_client = RailClient(api_key=api_key)
         self.r = self.api_client.arrivals()
 

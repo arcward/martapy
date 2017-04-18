@@ -99,7 +99,7 @@ class RailClient:
     @property
     def url(self):
         """``RailClient.base_url`` formatted with API key"""
-        return self.base_url.format(self.api_key)
+        return self.base_url.format(api_key=self.api_key)
 
 
 class Arrivals(list):

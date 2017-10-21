@@ -216,7 +216,6 @@ class Arrivals(list):
         station_arrivals = defaultdict(list)
         for a in self._arrivals:
             station_arrivals[a.station].append(a)
-
         return OrderedDict(sorted(station_arrivals.items()))
 
     def by_station(self, station_name):
@@ -265,8 +264,10 @@ class Arrivals(list):
         :type value: str
         :return: ``martapy.rail.Arrivals`` containing matching arrivals
         """
-        filtered = [json.loads(a.json) for a in self.arrivals if
-                    getattr(a, attribute_name) == value]
+        filtered = [
+            json.loads(a.json) for a in self.arrivals
+            if getattr(a, attribute_name) == value
+        ]
         return Arrivals(filtered)
 
 
@@ -298,16 +299,12 @@ class Arrival:
 
         #: Destination (station name sans '*STATION*')
         self.destination = destination
-
         #: *RED*, *GREEN*, *BLUE*, or *GOLD* line
         self.line = line
-
         #: Station name (current list: ``martapy.rail.station_list``)
         self.station = station.upper()
-
         #: Positive or negative integer (ex '*-45*' seconds)
         self.waiting_seconds = waiting_seconds
-
         #: *Arriving*, *Arrived*, *Boarding*, *1 min*, *2 min*...
         self.waiting_time = waiting_time
 
@@ -340,8 +337,10 @@ class Arrival:
     @event_time.setter
     def event_time(self, event_time):
         """Set the event time as *MM/DD/YYYY HH:MM:SS AM/PM*"""
-        self._event_time = datetime.strptime(event_time,
-                                             "%m/%d/%Y %I:%M:%S %p")
+        self._event_time = datetime.strptime(
+            event_time,
+            "%m/%d/%Y %I:%M:%S %p"
+        )
 
     @property
     def next_arr(self):
@@ -435,8 +434,9 @@ class Arrival:
         arrival_keys = list(arrival.keys())
         unique_keys = set(expected_keys) ^ set(arrival_keys)
         if unique_keys:
-            raise KeyError("Found unexpected keys.\n\tExpected: {}\n\t"
-                           "Not in list: {}".format(','.join(expected_keys),
-                                                    ','.join(unique_keys)))
+            expected = ','.join(expected_keys)
+            unique = ','.join(unique_keys)
+            raise KeyError("Found unexpected keys.\n\t Expected: {}\n\t "
+                           "Not in list: {}".format(expected, unique))
         return True
 

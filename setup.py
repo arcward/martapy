@@ -1,5 +1,6 @@
 from setuptools import setup
 import os
+import martapy
 
 
 def read(fname):
@@ -7,8 +8,8 @@ def read(fname):
 
 setup(
     name="martapy",
-    version="1.1",
-    author="Edward Wells",
+    version=martapy.__version__,
+    author=martapy.__author__,
     author_email="git@edward.sh",
     description="Wrapper for MARTA realtime rail/bus APIs",
     long_description=read('README.rst'),

@@ -1,5 +1,5 @@
 """Wrapper for MARTA Bus Realtime RESTful API"""
-import json
+import json as json_
 import requests
 from datetime import datetime
 
@@ -130,7 +130,7 @@ class Bus:
     @staticmethod
     def from_json(json_obj):
         kwargs = {Bus._attr_map[k]: v for (k, v) in json_obj.items()}
-        return Bus(json=json.dumps(json_obj), **kwargs)
+        return Bus(json=json_.dumps(json_obj), **kwargs)
 
     def __str__(self):
         return self.json
